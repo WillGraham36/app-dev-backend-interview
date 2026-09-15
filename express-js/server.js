@@ -9,8 +9,12 @@ app.use(express.json());
 // Create your mock database here using a built-in data structure (no libraries).
 // Use whichever structure you think fits best and explain your choice.
 
+
+
+
+
 /*
-1. GET /courses -- Get all course reviews.
+1. GET /courses -- Get ALL course reviews.
 
 Response: 200
 {
