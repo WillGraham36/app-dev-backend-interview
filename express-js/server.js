@@ -55,16 +55,16 @@ Response:
 If valid: 201, {"id": <new ID>}
 */
 app.post("/courses", (req, res) => {
-  const body = req.body;
+  // TODO: Read the request body and fill in the values below.
   const newReview = {
     id: null, // TODO: Choose a unique integer ID.
-    course: body.course,
-    professor: body.professor,
-    grade: body.grade,
-    term: body.term,
-    year: body.year,
-    rating: body.rating,
-    num_ratings: 1,
+    course: null,
+    professor: null,
+    grade: null,
+    term: null,
+    year: null,
+    rating: null,
+    num_ratings: null,
   };
   // TODO: Save newReview and return its ID.
   res.status(501).json({ error: "Not implemented" });

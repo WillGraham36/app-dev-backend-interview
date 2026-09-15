@@ -56,16 +56,17 @@ Response:
 If valid: 201, {"id": <new ID>}
 """
 @app.post("/courses", status_code=201)
-def add_review(body: dict = Body(...)):
+def add_review():
+    # TODO: Read the request body and fill in the values below.
     new_review = {
         "id": None,  # TODO: Choose a unique integer ID.
-        "course": body["course"],
-        "professor": body["professor"],
-        "grade": body["grade"],
-        "term": body["term"],
-        "year": body["year"],
-        "rating": body["rating"],
-        "num_ratings": 1,
+        "course": None,
+        "professor": None,
+        "grade": None,
+        "term": None,
+        "year": None,
+        "rating": None,
+        "num_ratings": None,
     }
     # TODO: Save new_review and return its ID.
     return JSONResponse(status_code=501, content={"error": "Not implemented"})
