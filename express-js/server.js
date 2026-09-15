@@ -1,41 +1,59 @@
 /*
-Build a course review API. Complete the three TODOs in order.
-Assume request bodies have the shown fields/types and ratings are numbers from 1 to 5.
-No input validation, duplicate checks, or real database setup is required.
+Build a course review API. Complete the endpoints below.
+Assume valid input: ratings are 1-5 and the ratings list is non-empty.
 */
 const express = require("express");
 const app = express();
 app.use(express.json());
 
-// Mock database = an ordinary JavaScript collection, not a database library.
-// Choose an array of objects OR a Map/object keyed by ID. Explain your choice.
-// Define it here, outside the handlers, so all requests share the same collection.
-// GET reads it, POST adds to it, PUT finds and changes a stored record.
-// Data resets when the server restarts. No SQL or database methods are needed.
-const exampleCourse = {
-  id: 1, course: "CMSC420", professor: "Justin", grade: "A",
-  term: "Fall", year: 2026, rating: 4.0, num_ratings: 2,
-};
-// Put exampleCourse in your collection so you can try GET immediately:
+// Create your mock database here using a built-in data structure (no libraries).
+// Use whichever structure you think fits best and explain your choice.
 
-let nextId = 2;
+/*
+1. GET /courses -- Get all course reviews.
 
-// 1. GET /courses -- Return every stored course review.
-// Response: 200, {"items": [<course records>]} (an empty collection returns []).
+Response: 200
+{
+    "items": [
+        {
+            "id": 1,
+            "course": "CMSC420",
+            "professor": "Justin",
+            "grade": "A",
+            "term": "Fall",
+            "year": 2026,
+            "rating": 4.0,
+            "num_ratings": 2
+        }
+    ]
+}
+Return {"items": []} if there are no reviews.
+*/
 app.get("/courses", (req, res) => {
-  // TODO: Read your collection and return its records as a JSON list in "items".
+  // TODO: Return all reviews.
   res.status(501).json({ error: "Not implemented" });
 });
 
-// 2. POST /courses -- Save a new course review.
-// Body: {"course": "CMSC420", "professor": "Justin", "grade": "B-",
-//        "term": "Fall", "year": 2026, "rating": 5}
-// Each submission creates a separate record; repeated courses are allowed.
-// Response: 201, {"id": <new ID>}
+/*
+2. POST /courses -- Create a review. Repeated courses are allowed.
+
+Request body:
+{
+    "course": "CMSC420",
+    "professor": "Justin",
+    "grade": "B-",
+    "term": "Fall",
+    "year": 2026,
+    "rating": 5
+}
+
+Response:
+If valid: 201, {"id": <new ID>}
+*/
 app.post("/courses", (req, res) => {
   const body = req.body;
   const newReview = {
-    id: nextId,
+    id: null, // TODO: Choose a unique integer ID.
     course: body.course,
     professor: body.professor,
     grade: body.grade,
@@ -44,23 +62,27 @@ app.post("/courses", (req, res) => {
     rating: body.rating,
     num_ratings: 1,
   };
-  nextId += 1;
-  // TODO: Store newReview in your collection and return its ID with status 201.
+  // TODO: Save newReview and return its ID.
   res.status(501).json({ error: "Not implemented" });
 });
 
-// 3. PUT /courses/1/rating -- Add ratings to an existing record.
-// Body: {"ratings": [5, 3, 1]} (assume a non-empty list of valid ratings).
-// Include the previous ratings when computing the new average; do not replace them.
-// Hint: the old average and count tell you the old total score.
-// Example: average 4.0, count 2 + [5, 3, 1] => average 3.4, count 5.
-// Grade and course details stay as submitted in the initial review.
-// Response: 200, {"id": 1, "rating": 3.4, "num_ratings": 5}
-// Unknown ID: 404, {"error": "Course not found"}
+/*
+3. PUT /courses/1/rating -- Add ratings to a review.
+Update the average and count, including previous ratings. Keep other fields unchanged.
+
+Request body:
+{
+    "ratings": [5, 3, 1]
+}
+
+Response:
+If valid: 200, {"id": <ID>, "rating": <new average>, "num_ratings": <new count>}
+If ID not found: 404, {"error": "Course not found"}
+*/
 app.put("/courses/:id/rating", (req, res) => {
   const courseId = Number(req.params.id);
   const ratings = req.body.ratings;
-  // TODO: Find the record, update its average AND count, and return those fields + ID.
+  // TODO: Find the review, update its rating and count, and return the result.
   res.status(501).json({ error: "Not implemented" });
 });
 
