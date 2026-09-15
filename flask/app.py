@@ -1,71 +1,70 @@
 """
-We are building a movie database and need to complete a couple of API endpoints
-We won't connect to a real database here, so we want you to create a data structure to mimic one
+Build a course review API. Complete the three TODOs in order.
+Assume request bodies have the shown fields/types and ratings are numbers from 1 to 5.
+No input validation, duplicate checks, or real database setup is required.
 
-Movies have the following attributes:
-{
-    "id": int,
-    "title": string,
-    "year": int,
-    "director": string,
-    "rating": float (1-5 inclusive),
-    "num_ratings": int (>= 0)
-}
-
-To run:
-1. cd flask
-2. flask run OR python -m flask run
+Run: cd flask, then python -m flask run
 """
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-# Create your data structure(s) here:
-
-# Complete the API endpoints below:
-
-"""
-POST /movies -- Add movie to the database
-Request body: {
-    “title”: string,
-    “year”: int,
-    “director”: string
+# Mock database = an ordinary Python collection, not a database library.
+# Choose a list of dictionaries OR a dictionary keyed by ID. Explain your choice.
+# Define it here, outside the handlers, so all requests share the same collection.
+# GET reads it, POST adds to it, PUT finds and changes a stored record.
+# Data resets when the server restarts. No SQL or database methods are needed.
+example_course = {
+    "id": 1, "course": "CMSC420", "professor": "Justin", "grade": "A",
+    "term": "Fall", "year": 2026, "rating": 4.0, "num_ratings": 2,
 }
+# Put example_course in your collection so you can try GET immediately:
 
-Response:
-If valid: 201 status code and JSON {“id”: <movie id>}
-If invalid: 400 status code and JSON {“error”: <message>}
-If duplicate of a previous entry: 409 status code and JSON {“error”: <message>”}
-"""
-# TODO: add route decorator
-def add_movie():
-    pass
+next_id = 2
 
-"""
-GET /movies -- Get all movies
-BONUS: add query parameter to filter movies by title (e.g. /movies?title=Inception)
 
-Response: status code 200, JSON: 
-{ 
-    items: [
-        { "id": 1, "title": "Inception", "year": 2010, "director": "Christopher Nolan", "rating": 4.98, "num_ratings": 5},
-        …
-    ]
-}
-"""
-# TODO: add route decorator
-def get_movies():
-    pass
+# 1. GET /courses -- Return every stored course review.
+# Response: 200, {"items": [<course records>]} (an empty collection returns []).
+@app.get("/courses")
+def get_courses():
+    # TODO: Read your collection and return its records as a JSON list in "items".
+    return jsonify({"error": "Not implemented"}), 501
 
-"""
-PUT /movies/<movie_id>/rating -- Recalculate movie's ratings field given new ratings, updating rating and num_rating attributes
-Example path: /movies/33/rating, where 33 is a movie_id
-Request body: {“ratings”: [3, 4.9, 1, 2, 4.0]}
 
-Response:
-If valid: 200 status code, JSON {“id”: <movie_id>, “rating”: <rating>, "num_ratings": <num_ratings>}
-If input invalid or movie_id doesn't exist: 400 status code, JSON {“error”: <msg>)
-"""
-# TODO: add route decorator
-def update_rating():
-    pass
+# 2. POST /courses -- Save a new course review.
+# Body: {"course": "CMSC420", "professor": "Justin", "grade": "B-",
+#        "term": "Fall", "year": 2026, "rating": 5}
+# Each submission creates a separate record; repeated courses are allowed.
+# Response: 201, {"id": <new ID>}
+@app.post("/courses")
+def add_review():
+    global next_id
+    body = request.get_json()
+    new_review = {
+        "id": next_id,
+        "course": body["course"],
+        "professor": body["professor"],
+        "grade": body["grade"],
+        "term": body["term"],
+        "year": body["year"],
+        "rating": body["rating"],
+        "num_ratings": 1,
+    }
+    next_id += 1
+    # TODO: Store new_review in your collection and return its ID with status 201.
+    return jsonify({"error": "Not implemented"}), 501
+
+
+# 3. PUT /courses/1/rating -- Add ratings to an existing record.
+# Body: {"ratings": [5, 3, 1]} (assume a non-empty list of valid ratings).
+# Include the previous ratings when computing the new average; do not replace them.
+# Hint: the old average and count tell you the old total score.
+# Example: average 4.0, count 2 + [5, 3, 1] => average 3.4, count 5.
+# Grade and course details stay as submitted in the initial review.
+# Response: 200, {"id": 1, "rating": 3.4, "num_ratings": 5}
+# Unknown ID: 404, {"error": "Course not found"}
+@app.put("/courses/<int:course_id>/rating")
+def update_rating(course_id):
+    ratings = request.get_json()["ratings"]
+    # TODO: Find the record, update its average AND count, and return those fields + ID.
+    return jsonify({"error": "Not implemented"}), 501
